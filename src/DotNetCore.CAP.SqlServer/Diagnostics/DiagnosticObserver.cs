@@ -40,7 +40,7 @@ namespace DotNetCore.CAP.SqlServer.Diagnostics
         {
             if (evt.Key == SqlAfterCommitTransaction || evt.Key == SqlAfterCommitTransactionMicrosoft)
             {
-                var sqlConnection = (SqlConnection)GetProperty(evt.Value, "Connection");
+                var sqlConnection = GetProperty(evt.Value, "Connection") as SqlConnection;
                 var transactionKey = sqlConnection.ClientConnectionId;
                 if (_bufferList.TryRemove(transactionKey, out var msgList))
                     foreach (var message in msgList)
@@ -50,7 +50,7 @@ namespace DotNetCore.CAP.SqlServer.Diagnostics
             }
             else if (evt.Key == SqlErrorCommitTransaction || evt.Key == SqlErrorCommitTransactionMicrosoft)
             {
-                var sqlConnection = (SqlConnection)GetProperty(evt.Value, "Connection");
+                var sqlConnection = GetProperty(evt.Value, "Connection") as SqlConnection;
                 var transactionKey = sqlConnection.ClientConnectionId;
 
                 _bufferList.TryRemove(transactionKey, out _);
